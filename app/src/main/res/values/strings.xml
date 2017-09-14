@@ -10,9 +10,11 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="select_priority">Select Priority</string>
-    <string name="deadline">Deadline</string>
+    <string name="created">Created: </string>
     <string name="ddmmyy">DDMMYY</string>
     <string name="save_todo">SAVE TODO</string>
+    <string name="complete_todo">Complete</string>
+    <string name="fragment_todo_details_status_text">Completed:</string>
     <string-array name="priority_array">
         <item>HIGH</item>
         <item>MEDIUM</item>

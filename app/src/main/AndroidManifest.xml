@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.showcase.todoapp"
+          package="com.shingrus.todaytodo"
     >
 
     <application
@@ -24,7 +24,7 @@
 
         <provider
             android:name=".database.TodoProvider"
-            android:authorities="com.showcase.todoapp.provider"
+            android:authorities="com.shingrus.todaytodo.provider"
             android:exported="false"
             android:protectionLevel="signature"
             />

@@ -52,31 +52,6 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/select_priority"
-                android:textSize="@dimen/text_big"
-                />
-
-            <Spinner
-                android:id="@+id/fragment_todo_details_spn_priority"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_weight="1"
-                />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/fragment_todo_details_ll_date_container"
@@ -90,7 +65,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/deadline"
+                android:text="@string/created"
                 android:textSize="@dimen/text_big"
                 />
 
@@ -101,14 +76,36 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginStart="25dp"
                 android:layout_weight="1"
-                android:drawableEnd="@android:drawable/ic_menu_my_calendar"
-                android:drawableRight="@android:drawable/ic_menu_my_calendar"
+                android:drawableEnd="@android:drawable/ic_menu_today"
                 android:gravity="center_vertical"
                 android:text="@string/ddmmyy"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_big"
                 android:textStyle="italic"
                 />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_todo_details_ll_status_container"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:gravity="left"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fragment_todo_details_status_text"
+                android:textSize="@dimen/text_big"
+                />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment_todo_details_cx_status"
+                android:checked="false"/>
         </LinearLayout>
 
         <Button
