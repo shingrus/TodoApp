@@ -14,7 +14,7 @@
         android:layout_centerVertical="true"
         android:button="@drawable/checkbox_selector"
         android:gravity="center_vertical"
-
+        android:padding="10dp"
         />
 
     <TextView
