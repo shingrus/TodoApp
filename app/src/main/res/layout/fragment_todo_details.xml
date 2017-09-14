@@ -29,7 +29,9 @@
                 android:hint="@string/title"
                 android:maxLength="25"
                 android:maxLines="1"
+                android:singleLine="true"
                 android:textSize="@dimen/text_big"
+                android:imeOptions="actionDone"
                 />
 
         </android.support.design.widget.TextInputLayout>
