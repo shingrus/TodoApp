@@ -3,8 +3,12 @@ package  com.shingrus.todaytodo.database;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.text.format.DateFormat;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public final class TodoContract
 {
@@ -13,11 +17,21 @@ public final class TodoContract
 
     //Tables specific path:
     public static final String RELATIVE_TODO_URI = "todo";
+
+
+
     final static  SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
-    public static final String getInsertedDate (int seconds) {
-        return sdf.format(seconds*1000);
+
+    public static final String getInsertedTime (int seconds) {
+
+        return (String) DateFormat.format("HH:mm:ss", seconds* 1000L);
     }
+    public static final String getInsertedDate (int seconds) {
+
+        return (String) DateFormat.format("dd/MM/yyyy", seconds* 1000L);
+    }
+
 
     public static class Todo
     {

@@ -67,13 +67,18 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
 
         int date = cursor.getInt(cursor.getColumnIndex(TodoContract.Todo.Columns.INSERTED));
         long longdate = (long) date * 1000;
-        holder.date.setText(TodoContract.getInsertedDate(date));
+
+        boolean lonagerThanTimeout = (currentTimeMillis - longdate > AUTODONE_TIMEOUT);
+
+        if(lonagerThanTimeout)
+            holder.date.setText(TodoContract.getInsertedDate(date));
+        else
+            holder.date.setText(TodoContract.getInsertedTime(date));
 
         String status = cursor.getString(cursor.getColumnIndex(TodoContract.Todo.Columns.STATUS));
         Log.d(TAG, "LongDate: " + longdate + " Cur:" + currentTimeMillis + " Status: " + status);
         if (status.equals(String.valueOf(TodoContract.Todo.TODO_STATUS.COMPLETE)) ||
-                (currentTimeMillis - longdate > AUTODONE_TIMEOUT)) {
-//            holder.button.setVisibility(View.INVISIBLE);
+                lonagerThanTimeout) {
             holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
         else {

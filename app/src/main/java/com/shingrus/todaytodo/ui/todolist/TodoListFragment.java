@@ -92,7 +92,7 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
     {
         String[] projection = {TodoContract.Todo.Columns._ID, TodoContract.Todo.Columns.TITLE,
                 TodoContract.Todo.Columns.INSERTED, TodoContract.Todo.Columns.STATUS};
-        String sortOrder = TodoContract.Todo.Columns.INSERTED + " DESC";
+        String sortOrder = TodoContract.Todo.Columns.STATUS + " DESC, "+ TodoContract.Todo.Columns.INSERTED + " DESC";
         return new CursorLoader(getContext(), TodoContract.Todo.CONTENT_URI, projection, null,
                 null, sortOrder);
     }
