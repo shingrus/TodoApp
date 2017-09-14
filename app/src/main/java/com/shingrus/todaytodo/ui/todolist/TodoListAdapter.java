@@ -25,32 +25,31 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemViewHolder>
-{
+public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemViewHolder> {
     private static final String TAG = "TADAPTER";
     private OnRowClickListener mClickListener;
-    public static final int AUTODONE_TIMEOUT = 86400*1000; //ms
-    
+    public static final int AUTODONE_TIMEOUT = 86400 * 1000; //ms
+    final String timeLeftFormat;
+
 
 //    private String[] mPriorityArray;
 //    private int[] mPrColorArray;
 
-    public interface OnRowClickListener
-    {
+    public interface OnRowClickListener {
         void onRowClick(Uri uri);
 
         void onRowLongClick(String message, int row_id);
+
         void onCheckedChanged(int rowId, boolean checked);
     }
 
 
-    public TodoListAdapter(Context context, Cursor cursor, OnRowClickListener clickListener)
-    {
+    public TodoListAdapter(Context context, Cursor cursor, OnRowClickListener clickListener) {
         super(cursor);
         Resources resources = context.getResources();
         mClickListener = clickListener;
 
-
+        timeLeftFormat = context.getString(R.string.time_left_format);
 
 
 //        mPriorityArray = resources.getStringArray(R.array.priority_array);
@@ -62,7 +61,6 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
     @Override
     public void onBindViewHolder(ItemViewHolder holder, final Cursor cursor) {
 
-//        Log.d(TAG, "onBindViewHolder called");
         holder.title.setText(cursor.getString(cursor.getColumnIndex(TodoContract.Todo.Columns
                 .TITLE)));
 
@@ -71,22 +69,19 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
         int date = cursor.getInt(cursor.getColumnIndex(TodoContract.Todo.Columns.INSERTED));
         long longdate = (long) date * 1000;
 
+        long hoursLeft = (longdate + AUTODONE_TIMEOUT - currentTimeMillis) / 1000 / 3600;
+
         boolean lonagerThanTimeout = (currentTimeMillis - longdate > AUTODONE_TIMEOUT);
-
-        if(lonagerThanTimeout)
-            holder.date.setText(TodoContract.getInsertedDate(date));
-        else
-            holder.date.setText(TodoContract.getInsertedTime(date));
-
         String status = cursor.getString(cursor.getColumnIndex(TodoContract.Todo.Columns.STATUS));
-//        Log.d(TAG, "LongDate: " + longdate + " Cur:" + currentTimeMillis + " Status: " + status);
         if (status.equals(String.valueOf(TodoContract.Todo.TODO_STATUS.COMPLETE)) ||
                 lonagerThanTimeout) {
+            holder.date.setText(TodoContract.getInsertedDate(date));
+
             holder.cbx.setChecked(true);
             holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.itemView.setAlpha(0.4f);
-        }
-        else {
+        } else {
+            holder.date.setText(String.format(timeLeftFormat, hoursLeft));
             holder.cbx.setChecked(false);
             holder.itemView.setAlpha(1f);
             holder.title.setPaintFlags(holder.title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
@@ -94,8 +89,7 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
     }
 
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout
                 .todo_list_row, parent, false));
     }
@@ -108,8 +102,7 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
 //        private final Button button;
 //        private final TextView priority;
 
-        ItemViewHolder(View itemView)
-        {
+        ItemViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.todo_list_row_tv_title);
             date = (TextView) itemView.findViewById(R.id.todo_list_row_tv_date);
@@ -122,12 +115,9 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
         }
 
         @Override
-        public void onClick(View view)
-        {
-            if (mClickListener != null)
-            {
-                if (mCursor.moveToPosition(getAdapterPosition()))
-                {
+        public void onClick(View view) {
+            if (mClickListener != null) {
+                if (mCursor.moveToPosition(getAdapterPosition())) {
                     int columnIdIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns._ID);
                     Uri uri = TodoContract.Todo.buildRowUri(mCursor.getInt(columnIdIndex));
                     mClickListener.onRowClick(uri);
@@ -136,12 +126,9 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
         }
 
         @Override
-        public boolean onLongClick(View view)
-        {
-            if (mClickListener != null)
-            {
-                if (mCursor.moveToPosition(getAdapterPosition()))
-                {
+        public boolean onLongClick(View view) {
+            if (mClickListener != null) {
+                if (mCursor.moveToPosition(getAdapterPosition())) {
                     int columnIdIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns._ID);
                     int columnDataIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns.TITLE);
                     Log.d("LONG", String.valueOf(mCursor.getInt(columnIdIndex)));
@@ -155,8 +142,8 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             //checkbox listener
-            if(mClickListener != null) {
-                if(mCursor.moveToPosition(getAdapterPosition())) {
+            if (mClickListener != null) {
+                if (mCursor.moveToPosition(getAdapterPosition())) {
 
                     mClickListener.onCheckedChanged(mCursor.getInt(mCursor.getColumnIndex(TodoContract.Todo.Columns._ID)), b);
                 }

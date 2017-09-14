@@ -119,12 +119,10 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onCheckedChanged(int rowId, boolean checked) {
-        Log.d("Checked", String.valueOf(rowId));
-
         String selection = TodoContract.Todo.Columns._ID + " = ?";
-        ContentValues values = new ContentValues(1);
+        ContentValues values = new ContentValues();
         values.put(TodoContract.Todo.Columns.STATUS, String.valueOf(
-                checked ? TodoContract.Todo.TODO_STATUS.COMPLETE : TodoContract.Todo.TODO_STATUS.INCOMPLETE));
+                checked ? TodoContract.Todo.TODO_STATUS.COMPLETE : TodoContract.Todo.TODO_STATUS.INCOMPLETE));;
         QueryHandler queryHandler = new QueryHandler(getContext(), null);
 
         String[] selectionArg = {String.valueOf(rowId)};

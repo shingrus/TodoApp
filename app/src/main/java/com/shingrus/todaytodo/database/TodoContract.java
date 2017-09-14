@@ -32,7 +32,6 @@ public final class TodoContract
         return (String) DateFormat.format("dd/MM/yyyy", seconds* 1000L);
     }
 
-
     public static class Todo
     {
         // URI for the table
@@ -59,7 +58,6 @@ public final class TodoContract
             String INSERTED  = "inserted_at";
             String STATUS = "status";
         }
-
 
         private final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
