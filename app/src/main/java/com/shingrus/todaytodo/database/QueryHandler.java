@@ -23,6 +23,7 @@ public class QueryHandler extends AsyncQueryHandler
         int TOKEN_INSERT = 1;
         int TOKEN_UPDATE = 2;
         int TOKEN_DELETE = 3;
+        int TOKEN_CHANGE_STATUS = 4;
     }
 
     /**

@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.shingrus.todaytodo.R;
@@ -38,6 +40,7 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
         void onRowClick(Uri uri);
 
         void onRowLongClick(String message, int row_id);
+        void onCheckedChanged(int rowId, boolean checked);
     }
 
 
@@ -59,7 +62,7 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
     @Override
     public void onBindViewHolder(ItemViewHolder holder, final Cursor cursor) {
 
-        Log.d(TAG, "onBindViewHolder called");
+//        Log.d(TAG, "onBindViewHolder called");
         holder.title.setText(cursor.getString(cursor.getColumnIndex(TodoContract.Todo.Columns
                 .TITLE)));
 
@@ -76,12 +79,16 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
             holder.date.setText(TodoContract.getInsertedTime(date));
 
         String status = cursor.getString(cursor.getColumnIndex(TodoContract.Todo.Columns.STATUS));
-        Log.d(TAG, "LongDate: " + longdate + " Cur:" + currentTimeMillis + " Status: " + status);
+//        Log.d(TAG, "LongDate: " + longdate + " Cur:" + currentTimeMillis + " Status: " + status);
         if (status.equals(String.valueOf(TodoContract.Todo.TODO_STATUS.COMPLETE)) ||
                 lonagerThanTimeout) {
+            holder.cbx.setChecked(true);
             holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.itemView.setAlpha(0.4f);
         }
         else {
+            holder.cbx.setChecked(false);
+            holder.itemView.setAlpha(1f);
             holder.title.setPaintFlags(holder.title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
@@ -94,10 +101,10 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View
-            .OnLongClickListener
-    {
+            .OnLongClickListener, CompoundButton.OnCheckedChangeListener {
         private final TextView title;
         private final TextView date;
+        private final CheckBox cbx;
 //        private final Button button;
 //        private final TextView priority;
 
@@ -106,10 +113,12 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.todo_list_row_tv_title);
             date = (TextView) itemView.findViewById(R.id.todo_list_row_tv_date);
+            cbx = itemView.findViewById(R.id.todo_list_row_cx_completed);
 //            button = itemView.findViewById(R.id.todo_list_row_b_done);
 //            priority = (TextView) itemView.findViewById(R.id.todo_list_row_tv_priority);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+            cbx.setOnCheckedChangeListener(this);
         }
 
         @Override
@@ -135,11 +144,24 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
                 {
                     int columnIdIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns._ID);
                     int columnDataIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns.TITLE);
+                    Log.d("LONG", String.valueOf(mCursor.getInt(columnIdIndex)));
                     mClickListener.onRowLongClick(mCursor.getString(columnDataIndex), mCursor
                             .getInt(columnIdIndex));
                 }
             }
             return true;
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            //checkbox listener
+            if(mClickListener != null) {
+                if(mCursor.moveToPosition(getAdapterPosition())) {
+
+                    mClickListener.onCheckedChanged(mCursor.getInt(mCursor.getColumnIndex(TodoContract.Todo.Columns._ID)), b);
+                }
+
+            }
         }
     }
 }
