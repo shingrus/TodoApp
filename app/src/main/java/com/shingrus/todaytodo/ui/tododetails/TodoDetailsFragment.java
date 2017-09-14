@@ -1,7 +1,9 @@
 package com.shingrus.todaytodo.ui.tododetails;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,6 +41,7 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
     private EditText mDescription;
     private CheckBox mCheckBoxStatus;
     private View mDateLayout;
+    private View mStatusLayout;
 //    private Spinner mSpinner;
     private Uri mUri;
 
@@ -79,6 +83,7 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
             handler.startQuery(QueryHandler.OperationToken.TOKEN_QUERY, null, mUri, null, null,
                     null, null);
         }
+
     }
 
     @Override
@@ -98,12 +103,21 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
 
         mTitle = view.findViewById(R.id.fragment_todo_details_et_title);
         mTitle.setOnEditorActionListener(this);
+        if(mUri==null) {
+            mTitle.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mTitle, InputMethodManager.SHOW_IMPLICIT);
+        }
         mDescription = view.findViewById(R.id.fragment_todo_details_et_desc);
         mCheckBoxStatus = view.findViewById(R.id.fragment_todo_details_cx_status);
         mDateLayout = view.findViewById(R.id.fragment_todo_details_ll_date_container);
         mDateLayout.setVisibility(View.GONE);
+
+        mStatusLayout = view.findViewById(R.id.fragment_todo_details_ll_status_container);
+        mStatusLayout.setVisibility(View.GONE);
         view.findViewById(R.id.fragment_todo_details_btn_save_todo).setOnClickListener(this);
     }
+
 
     @Override
     public void onClick(View view)
@@ -121,6 +135,14 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
                 if (validateTitle())
                 {
                     saveTodo();
+                    InputMethodManager inputManager = (InputMethodManager) getContext()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                    // check if no view has focus:
+                    View v = ((Activity) getContext()).getCurrentFocus();
+                    if (v == null)
+                        return;
+
+                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
                 else
                 {
@@ -187,6 +209,7 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
     @Override
     public void onDestroy()
     {
+
         TodoApplication.getRefWatcher(getContext()).watch(this);
         super.onDestroy();
     }
@@ -209,11 +232,13 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
             int date = cursor.getInt(cursor.getColumnIndex(TodoContract.Todo.Columns.INSERTED));
             mDate.setText(TodoContract.getInsertedDate(date));
             mDateLayout.setVisibility(View.VISIBLE);
+            mStatusLayout.setVisibility(View.VISIBLE);
 
 
             if (cursor.getString(cursor.getColumnIndex(TodoContract.Todo.Columns.STATUS)).equals(String.valueOf(TodoContract.Todo.TODO_STATUS.COMPLETE))) {
                 mCheckBoxStatus.setChecked(true);
             }
+
 
 //            mSpinner.setSelection(cursor.getInt(cursor.getColumnIndex(TodoContract.Todo.Columns
 //                    .PRIORITY)), true);
