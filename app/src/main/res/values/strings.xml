@@ -14,4 +14,5 @@
     <string name="complete_todo">Complete</string>
     <string name="fragment_todo_details_status_text">Completed:</string>
     <string name="time_left_format">%d hours left</string>
+    <string name="ressurect_todo">Reset</string>
 </resources>
