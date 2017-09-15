@@ -64,25 +64,31 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
         holder.title.setText(cursor.getString(cursor.getColumnIndex(TodoContract.Todo.Columns
                 .TITLE)));
 
-        long currentTimeMillis = System.currentTimeMillis();
+        String status = cursor.getString(cursor.getColumnIndex(TodoContract.Todo.Columns.STATUS));
+        boolean isCompleted = status.equals(String.valueOf(TodoContract.Todo.TODO_STATUS.COMPLETE));
+
 
         int date = cursor.getInt(cursor.getColumnIndex(TodoContract.Todo.Columns.INSERTED));
-        long longdate = (long) date * 1000;
 
+        long currentTimeMillis = System.currentTimeMillis();
+        long longdate = (long) date * 1000;
         long hoursLeft = (longdate + AUTODONE_TIMEOUT - currentTimeMillis) / 1000 / 3600;
 
-        boolean lonagerThanTimeout = (currentTimeMillis - longdate > AUTODONE_TIMEOUT);
-        String status = cursor.getString(cursor.getColumnIndex(TodoContract.Todo.Columns.STATUS));
-        if (status.equals(String.valueOf(TodoContract.Todo.TODO_STATUS.COMPLETE)) ||
-                lonagerThanTimeout) {
-            holder.date.setText(TodoContract.getInsertedDate(date));
+        boolean longerThanTimeout = ((currentTimeMillis - longdate) > AUTODONE_TIMEOUT);
 
-            holder.cbx.setChecked(true);
+        holder.cbx.setChecked(isCompleted);
+
+
+        if(longerThanTimeout)
+            holder.date.setText(TodoContract.getInsertedDate(date));
+        else
+            holder.date.setText(String.format(timeLeftFormat, hoursLeft));
+
+        if ( isCompleted || longerThanTimeout) {
             holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.itemView.setAlpha(0.4f);
         } else {
-            holder.date.setText(String.format(timeLeftFormat, hoursLeft));
-            holder.cbx.setChecked(false);
+
             holder.itemView.setAlpha(1f);
             holder.title.setPaintFlags(holder.title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         }
@@ -131,7 +137,6 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
                 if (mCursor.moveToPosition(getAdapterPosition())) {
                     int columnIdIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns._ID);
                     int columnDataIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns.TITLE);
-                    Log.d("LONG", String.valueOf(mCursor.getInt(columnIdIndex)));
                     mClickListener.onRowLongClick(mCursor.getString(columnDataIndex), mCursor
                             .getInt(columnIdIndex));
                 }

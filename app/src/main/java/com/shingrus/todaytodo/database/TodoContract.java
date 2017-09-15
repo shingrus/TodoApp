@@ -53,10 +53,9 @@ public final class TodoContract
         {
             String TITLE = "title";
             String DESCRIPTION = "description";
-//            String DATE = "date";
-//            String PRIORITY = "priority";
             String INSERTED  = "inserted_at";
             String STATUS = "status";
+            String TOUCHED = "touched";
         }
 
         private final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");

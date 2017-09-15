@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,7 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState)
     {
+        Log.d("FRAG", "OnCreateView");
         return inflater.inflate(R.layout.fragment_todo_details, container, false);
     }
 
@@ -85,6 +87,8 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
         }
 
     }
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)

@@ -61,6 +61,7 @@ public class TodoProvider extends ContentProvider
         switch (sUriMatcher.match(uri))
         {
             case TODO_TABLE_ID:
+
                 retCursor = db.query(TodoContract.Todo.TABLE_NAME, projection, selection,
                         selectionArgs, null, null, sortOrder);
                 break;
@@ -89,7 +90,6 @@ public class TodoProvider extends ContentProvider
 
         if (sUriMatcher.match(uri) == TODO_TABLE_ID)
         {
-//            contentValues.put(TodoContract.Todo.Columns.TOUCHED, (System.currentTimeMillis()/1000));
             _id = db.insert(TodoContract.Todo.TABLE_NAME, null, contentValues);
             if (_id > 0)
             {
@@ -139,6 +139,8 @@ public class TodoProvider extends ContentProvider
         int rows = 0;
         if (sUriMatcher.match(uri) == TODO_TABLE_ID)
         {
+            long time = System.currentTimeMillis()/1000;
+            values.put(TodoContract.Todo.Columns.TOUCHED, time);
             rows = db.update(TodoContract.Todo.TABLE_NAME, values, selection, selectionArgs);
         }
         else

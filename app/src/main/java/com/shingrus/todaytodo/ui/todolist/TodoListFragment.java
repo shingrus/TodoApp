@@ -45,18 +45,25 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
         if (getActivity() instanceof TodoListFragmentListener) {
             mFragmentListener = (TodoListFragmentListener) getActivity();
         }
+        Log.d("FRAG", "OnCreate");
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
+        Log.d("FRAG", "OnCreateView");
+
         return inflater.inflate(R.layout.fragment_todo_list, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        Log.d("FRAG", "OnActivityCreated");
+
 
         View view = getView();
         mSwitcher = (ViewSwitcher) view.findViewById(R.id.fragment_todo_list_switcher);
@@ -81,16 +88,38 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
                 displayDetailsFragment(null);
             }
         });
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("FRAG", "OnStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("FRAGM", "OnResume");
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        long adjustedNow = System.currentTimeMillis()/ 1000 - TodoListAdapter.AUTODONE_TIMEOUT;
+
         String[] projection = {TodoContract.Todo.Columns._ID, TodoContract.Todo.Columns.TITLE,
                 TodoContract.Todo.Columns.INSERTED, TodoContract.Todo.Columns.STATUS};
-        String sortOrder = TodoContract.Todo.Columns.STATUS + " DESC, " + TodoContract.Todo.Columns.INSERTED + " DESC";
+        String sortOrder = TodoContract.Todo.Columns.STATUS + " DESC, "
+                + TodoContract.Todo.Columns.INSERTED + " > " + adjustedNow
+                + "," + TodoContract.Todo.Columns.TOUCHED + " DESC";
+
+
         return new CursorLoader(getContext(), TodoContract.Todo.CONTENT_URI, projection, null,
                 null, sortOrder);
     }
+
+
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {

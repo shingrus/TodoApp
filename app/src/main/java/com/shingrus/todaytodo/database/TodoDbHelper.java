@@ -8,7 +8,7 @@ import com.shingrus.todaytodo.database.TodoContract.Todo.Columns;
 
 public class TodoDbHelper extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "todoitems.db";
     private static final String COMMA_SEP = ",";
     private static final String SPACE = " ";
@@ -17,7 +17,8 @@ public class TodoDbHelper extends SQLiteOpenHelper
             "(" + Columns._ID + SPACE + "INTEGER PRIMARY KEY" + COMMA_SEP + Columns.TITLE + SPACE +
             "TEXT NOT NULL" + COMMA_SEP + Columns.DESCRIPTION + SPACE + "TEXT NOT NULL" +
             COMMA_SEP + Columns.STATUS + SPACE + "TEXT default '" + TodoContract.Todo.TODO_STATUS.INCOMPLETE.toString() +"'" +
-            COMMA_SEP + Columns.INSERTED + " INTEGER default (strftime('%s','now'))"  + ")";
+            COMMA_SEP + Columns.INSERTED + " INTEGER default (strftime('%s','now'))"  +
+            COMMA_SEP + Columns.TOUCHED + " INTEGER default (strftime('%s','now'))"+ ")";
 
     private static final String DROP_TABLE_TODO = "DROP TABLE IF EXISTS " + TodoContract.Todo
             .TABLE_NAME;
