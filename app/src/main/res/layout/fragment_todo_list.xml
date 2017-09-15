@@ -32,14 +32,14 @@
     </ViewSwitcher>
 
     <FrameLayout
-        android:layout_width="128dp"
-        android:layout_height="128dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_gravity="bottom|end"
         >
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fragment_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_gravity="bottom|end"
         android:layout_margin="5dp"
         android:src="@drawable/ic_add"
