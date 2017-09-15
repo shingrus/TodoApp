@@ -80,7 +80,7 @@
                 android:layout_weight="1"
                 android:drawableEnd="@android:drawable/ic_menu_today"
                 android:gravity="center_vertical"
-                android:text="@string/ddmmyy"
+                android:text=""
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_big"
                 android:textStyle="italic"
