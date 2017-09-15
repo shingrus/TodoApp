@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">TodoApp</string>
-    <string name="todo_list">Today ToDo</string>
+    <string name="app_name" translatable="false">TodayTodo</string>
+    <string name="todo_list" translatable="false">Today ToDo</string>
     <string name="todo_details">Task Details</string>
     <string name="delete_dialog_message">Are you sure you want to delete your TODO:\n\n</string>
     <string name="delete_dialog_title">Delete Task</string>
@@ -9,17 +9,9 @@
     <string name="your_todo_is_empty">Your TODO is empty.</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
-    <string name="select_priority">Select Priority</string>
     <string name="created">Created: </string>
-    <string name="ddmmyy">DDMMYY</string>
     <string name="save_todo">SAVE TODO</string>
     <string name="complete_todo">Complete</string>
     <string name="fragment_todo_details_status_text">Completed:</string>
     <string name="time_left_format">%d hours left</string>
-    <string-array name="priority_array">
-        <item>HIGH</item>
-        <item>MEDIUM</item>
-        <item>LOW</item>
-    </string-array>
-
 </resources>
