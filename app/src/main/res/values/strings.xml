@@ -15,4 +15,6 @@
     <string name="fragment_todo_details_status_text">Completed:</string>
     <string name="time_left_format">%d hours left</string>
     <string name="ressurect_todo">Reset</string>
+    <string name="ressurect_dialog_title">Reset Todo</string>
+    <string name="ressurect_dialog_message">Would you like to reset task?</string>
 </resources>

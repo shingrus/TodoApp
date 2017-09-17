@@ -26,8 +26,6 @@ import com.shingrus.todaytodo.database.TodoContract;
 import com.shingrus.todaytodo.utils.SpacesItemDecoration;
 import com.shingrus.todaytodo.utils.Utility;
 
-import java.sql.RowId;
-
 public class TodoListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         TodoListAdapter.OnRowClickListener {
     private TodoListAdapter mAdapter;
@@ -140,10 +138,15 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public void onRowClick(Uri uri) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(URI_KEY, uri);
-        displayDetailsFragment(bundle);
+    public void onRowClick(Uri uri, String message, int RowId, boolean isOutDated) {
+        if (isOutDated) {
+            showRessurectDialog(message, RowId);
+        }
+        else {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(URI_KEY, uri);
+            displayDetailsFragment(bundle);
+        }
     }
 
     @Override
@@ -168,11 +171,11 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onRowLongClick(String message, int rowId) {
-        showDialog(message, rowId);
+        showDeleteDialog(message, rowId);
     }
 
 
-    private void showDialog(String message, final int rowId) {
+    private void showDeleteDialog(String message, final int rowId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -188,6 +191,31 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
         dialog.setCancelable(false);
         dialog.setTitle(getString(R.string.delete_dialog_title));
         dialog.setMessage(getString(R.string.delete_dialog_message) + message);
+        dialog.show();
+    }
+
+    private void showRessurectDialog(String message, final int rowId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                String selection = TodoContract.Todo.Columns._ID + " = ?";
+                ContentValues values = new ContentValues();
+                values.put(TodoContract.Todo.Columns.STATUS, String.valueOf(TodoContract.Todo.TODO_STATUS.INCOMPLETE));;
+                long time = System.currentTimeMillis()/1000;
+                values.put(TodoContract.Todo.Columns.INSERTED, time);
+                QueryHandler queryHandler = new QueryHandler(getContext(), null);
+
+                String[] selectionArg = {String.valueOf(rowId)};
+                queryHandler.startUpdate(QueryHandler.OperationToken.TOKEN_UPDATE, null, TodoContract
+                        .Todo.CONTENT_URI, values, selection, selectionArg);
+
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setTitle(getString(R.string.ressurect_dialog_title));
+        dialog.setMessage(getString(R.string.ressurect_dialog_message) + message);
         dialog.show();
     }
 

@@ -8,10 +8,12 @@
     <string name="err_title_blank">Название не должно быть пустым</string>
     <string name="fragment_todo_details_status_text">Завершено:</string>
     <string name="invalid_state">Неверное состояние. Повторите</string>
-    <string name="save_todo">Сохранить Задачу.</string>
+    <string name="save_todo">Сохранить Задачу</string>
     <string name="time_left_format">%d ч. осталось</string>
     <string name="title">Название</string>
     <string name="todo_details">Описание Задачи</string>
     <string name="your_todo_is_empty">Список Задач пуст.</string>
     <string name="ressurect_todo">Воскресить</string>
+    <string name="ressurect_dialog_message">Хотите восстановить задачу?</string>
+    <string name="ressurect_dialog_title">Восстановить</string>
 </resources>

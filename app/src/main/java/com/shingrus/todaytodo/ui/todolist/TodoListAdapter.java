@@ -36,7 +36,7 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
 //    private int[] mPrColorArray;
 
     public interface OnRowClickListener {
-        void onRowClick(Uri uri);
+        void onRowClick(Uri uri, String Message, int rowId, boolean outdated);
 
         void onRowLongClick(String message, int row_id);
 
@@ -51,11 +51,6 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
 
         timeLeftFormat = context.getString(R.string.time_left_format);
 
-
-//        mPriorityArray = resources.getStringArray(R.array.priority_array);
-//        mPrColorArray = new int[]{ContextCompat.getColor(context, android.R.color.holo_red_dark),
-//                ContextCompat.getColor(context, android.R.color.holo_orange_dark), ContextCompat
-//                .getColor(context, android.R.color.holo_green_dark)};
     }
 
     @Override
@@ -74,15 +69,20 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
         long longdate = (long) date * 1000;
         long hoursLeft = (longdate + AUTODONE_TIMEOUT - currentTimeMillis) / 1000 / 3600;
 
-        boolean longerThanTimeout = ((currentTimeMillis - longdate) > AUTODONE_TIMEOUT);
+        boolean longerThanTimeout = isOutdated(longdate, currentTimeMillis);
 
         holder.cbx.setChecked(isCompleted);
 
 
-        if(longerThanTimeout)
+        if(longerThanTimeout) {
+            holder.cbx.setVisibility(View.GONE);
             holder.date.setText(TodoContract.getInsertedDate(date));
-        else
+        }
+        else {
+
+            holder.cbx.setVisibility(View.VISIBLE);
             holder.date.setText(String.format(timeLeftFormat, hoursLeft));
+        }
 
         if ( isCompleted || longerThanTimeout) {
             holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -92,6 +92,10 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
             holder.itemView.setAlpha(1f);
             holder.title.setPaintFlags(holder.title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         }
+    }
+
+    private boolean isOutdated(long longdate, long currentTimeMillis) {
+        return ((currentTimeMillis - longdate) > AUTODONE_TIMEOUT);
     }
 
     @Override
@@ -125,8 +129,14 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
             if (mClickListener != null) {
                 if (mCursor.moveToPosition(getAdapterPosition())) {
                     int columnIdIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns._ID);
+                    int columnDataIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns.TITLE);
+                    int columnInsertedIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns.INSERTED);
+                    long date = mCursor.getInt(columnInsertedIndex) *1000L;
+                    long currentTime = System.currentTimeMillis();
                     Uri uri = TodoContract.Todo.buildRowUri(mCursor.getInt(columnIdIndex));
-                    mClickListener.onRowClick(uri);
+                    mClickListener.onRowClick(uri, mCursor.getString(columnDataIndex),
+                            mCursor.getInt(columnIdIndex),
+                            isOutdated(date,currentTime));
                 }
             }
         }
