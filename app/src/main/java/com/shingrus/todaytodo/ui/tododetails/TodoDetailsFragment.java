@@ -93,11 +93,6 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
     {
         super.onActivityCreated(savedInstanceState);
         View view = getView();
-//        mSpinner = (Spinner) view.findViewById(R.id.fragment_todo_details_spn_priority);
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R
-//                .array.priority_array, android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        mSpinner.setAdapter(adapter);
 
         mDate = view.findViewById(R.id.fragment_todo_details_tv_date);
 
@@ -118,6 +113,7 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
         mStatusLayout = view.findViewById(R.id.fragment_todo_details_ll_status_container);
         mStatusLayout.setVisibility(View.GONE);
         view.findViewById(R.id.fragment_todo_details_btn_save_todo).setOnClickListener(this);
+        view.findViewById(R.id.fragment_todo_details_btn_cancel_todo).setOnClickListener(this);
     }
 
 
@@ -132,19 +128,18 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
 //                    mFragmentListener.displayDatePickerDialog();
 //                }
 //                break;
+            case R.id.fragment_todo_details_btn_cancel_todo:
+            {
+                finishFragment();
+                hideKeyboard();
+            }
+                break;
             case R.id.fragment_todo_details_btn_save_todo:
             case R.id.fragment_todo_details_et_title:
                 if (validateTitle())
                 {
                     saveTodo();
-                    InputMethodManager inputManager = (InputMethodManager) getContext()
-                            .getSystemService(Context.INPUT_METHOD_SERVICE);
-                    // check if no view has focus:
-                    View v = ((Activity) getContext()).getCurrentFocus();
-                    if (v == null)
-                        return;
-
-                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    hideKeyboard();
                 }
                 else
                 {
@@ -153,6 +148,17 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
                 }
                 break;
         }
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        // check if no view has focus:
+        View v = ((Activity) getContext()).getCurrentFocus();
+        if (v == null)
+            return;
+
+        inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     @Override

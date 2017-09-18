@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/lightBackground"
             android:clickable="true"
@@ -29,6 +31,7 @@
                 android:hint="@string/title"
                 android:maxLength="25"
                 android:maxLines="1"
+                android:inputType="textAutoCorrect"
                 android:singleLine="true"
                 android:textSize="@dimen/text_big"
                 android:imeOptions="actionDone"
@@ -110,16 +113,41 @@
                 android:checked="false"/>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/fragment_todo_details_btn_save_todo"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_marginTop="25dp"
-            android:background="@drawable/drawable_button_bg"
-            android:padding="10dp"
-            android:text="@string/save_todo"
-            android:textColor="@android:color/white"
-            />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/fragment_todo_details_btn_cancel_todo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/drawable_button_bg"
+                android:padding="10dp"
+                android:text="@string/cancel_todo"
+                android:textColor="@android:color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/fragment_todo_details_btn_save_todo"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <Button
+                android:id="@+id/fragment_todo_details_btn_save_todo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/drawable_button_bg"
+                android:padding="10dp"
+                android:text="@string/save_todo"
+                android:textColor="@android:color/white"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:layout_editor_absoluteY="0dp" />
+        </android.support.constraint.ConstraintLayout>
+
     </LinearLayout>
 </ScrollView>

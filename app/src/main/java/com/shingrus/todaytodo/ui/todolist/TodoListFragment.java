@@ -43,7 +43,6 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
         if (getActivity() instanceof TodoListFragmentListener) {
             mFragmentListener = (TodoListFragmentListener) getActivity();
         }
-        Log.d("FRAG", "OnCreate");
 
     }
 
@@ -51,8 +50,6 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
-        Log.d("FRAG", "OnCreateView");
-
         return inflater.inflate(R.layout.fragment_todo_list, container, false);
     }
 
@@ -60,7 +57,6 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Log.d("FRAG", "OnActivityCreated");
 
 
         View view = getView();
@@ -93,13 +89,13 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("FRAG", "OnStart");
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("FRAGM", "OnResume");
     }
 
     @Override
