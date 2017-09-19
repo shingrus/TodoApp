@@ -16,4 +16,5 @@
     <string name="ressurect_todo">Воскресить</string>
     <string name="ressurect_dialog_message">Хотите восстановить задачу?</string>
     <string name="ressurect_dialog_title">Восстановить</string>
+    <string name="cancel_todo">Отменить</string>
 </resources>

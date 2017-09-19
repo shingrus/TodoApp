@@ -17,5 +17,5 @@
     <string name="ressurect_todo">Reset</string>
     <string name="ressurect_dialog_title">Reset Todo</string>
     <string name="ressurect_dialog_message">Would you like to reset task?</string>
-    <string name="cancel_todo">Cancel task</string>
+    <string name="cancel_todo">Cancel ToDo</string>
 </resources>
