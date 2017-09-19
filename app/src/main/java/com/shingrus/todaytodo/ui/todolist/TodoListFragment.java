@@ -60,7 +60,7 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
 
 
         View view = getView();
-        mSwitcher = (ViewSwitcher) view.findViewById(R.id.fragment_todo_list_switcher);
+        mSwitcher = view.findViewById(R.id.fragment_todo_list_switcher);
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
@@ -68,7 +68,7 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
         //TODO: use button click listener
         //
         mAdapter = new TodoListAdapter(getContext(), null, this);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id
+        RecyclerView recyclerView = view.findViewById(R.id
                 .fragment_todo_list_rv_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
@@ -100,15 +100,14 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        long adjustedNow = System.currentTimeMillis()/ 1000 - TodoListAdapter.AUTODONE_TIMEOUT;
+        long adjustedNow = (System.currentTimeMillis() - TodoListAdapter.AUTODONE_TIMEOUT)/1000;
 
         String[] projection = {TodoContract.Todo.Columns._ID, TodoContract.Todo.Columns.TITLE,
                 TodoContract.Todo.Columns.INSERTED, TodoContract.Todo.Columns.STATUS};
-        String sortOrder = TodoContract.Todo.Columns.STATUS + " DESC, "
-                + TodoContract.Todo.Columns.INSERTED + " > " + adjustedNow
-                + "," + TodoContract.Todo.Columns.TOUCHED + " DESC";
-
-
+        String sortOrder = TodoContract.Todo.Columns.INSERTED + " > " + adjustedNow + " DESC," +
+        TodoContract.Todo.Columns.STATUS + " DESC," +
+                 TodoContract.Todo.Columns.TOUCHED + " DESC";
+        Log.d("FRAGMENT",  sortOrder);
         return new CursorLoader(getContext(), TodoContract.Todo.CONTENT_URI, projection, null,
                 null, sortOrder);
     }
@@ -150,7 +149,7 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
         String selection = TodoContract.Todo.Columns._ID + " = ?";
         ContentValues values = new ContentValues();
         values.put(TodoContract.Todo.Columns.STATUS, String.valueOf(
-                checked ? TodoContract.Todo.TODO_STATUS.COMPLETE : TodoContract.Todo.TODO_STATUS.INCOMPLETE));;
+                checked ? TodoContract.Todo.TODO_STATUS.COMPLETE : TodoContract.Todo.TODO_STATUS.INCOMPLETE));
         QueryHandler queryHandler = new QueryHandler(getContext(), null);
 
         String[] selectionArg = {String.valueOf(rowId)};
@@ -196,7 +195,7 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
             public void onClick(DialogInterface dialog, int id) {
                 String selection = TodoContract.Todo.Columns._ID + " = ?";
                 ContentValues values = new ContentValues();
-                values.put(TodoContract.Todo.Columns.STATUS, String.valueOf(TodoContract.Todo.TODO_STATUS.INCOMPLETE));;
+                values.put(TodoContract.Todo.Columns.STATUS, String.valueOf(TodoContract.Todo.TODO_STATUS.INCOMPLETE));
                 long time = System.currentTimeMillis()/1000;
                 values.put(TodoContract.Todo.Columns.INSERTED, time);
                 QueryHandler queryHandler = new QueryHandler(getContext(), null);

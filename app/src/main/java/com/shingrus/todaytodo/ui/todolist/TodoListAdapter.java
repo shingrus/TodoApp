@@ -25,17 +25,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemViewHolder> {
+class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemViewHolder> {
     private static final String TAG = "TADAPTER";
     private OnRowClickListener mClickListener;
-    public static final int AUTODONE_TIMEOUT = 86400 * 1000; //ms
-    final String timeLeftFormat;
+    static final int AUTODONE_TIMEOUT = 86400 * 1000; //ms
+    private final String timeLeftFormat;
 
 
 //    private String[] mPriorityArray;
 //    private int[] mPrColorArray;
 
-    public interface OnRowClickListener {
+    interface OnRowClickListener {
         void onRowClick(Uri uri, String Message, int rowId, boolean outdated);
 
         void onRowLongClick(String message, int row_id);
@@ -44,7 +44,7 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
     }
 
 
-    public TodoListAdapter(Context context, Cursor cursor, OnRowClickListener clickListener) {
+    TodoListAdapter(Context context, Cursor cursor, OnRowClickListener clickListener) {
         super(cursor);
         Resources resources = context.getResources();
         mClickListener = clickListener;
@@ -52,6 +52,7 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
         timeLeftFormat = context.getString(R.string.time_left_format);
 
     }
+
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, final Cursor cursor) {
@@ -98,6 +99,7 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
         return ((currentTimeMillis - longdate) > AUTODONE_TIMEOUT);
     }
 
+
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout
@@ -114,8 +116,8 @@ public class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemV
 
         ItemViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.todo_list_row_tv_title);
-            date = (TextView) itemView.findViewById(R.id.todo_list_row_tv_date);
+            title = itemView.findViewById(R.id.todo_list_row_tv_title);
+            date = itemView.findViewById(R.id.todo_list_row_tv_date);
             cbx = itemView.findViewById(R.id.todo_list_row_cx_completed);
 //            button = itemView.findViewById(R.id.todo_list_row_b_done);
 //            priority = (TextView) itemView.findViewById(R.id.todo_list_row_tv_priority);
