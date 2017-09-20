@@ -61,12 +61,8 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
 
         View view = getView();
         mSwitcher = view.findViewById(R.id.fragment_todo_list_switcher);
-
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
-
-        //TODO: use button click listener
-        //
         mAdapter = new TodoListAdapter(getContext(), null, this);
         RecyclerView recyclerView = view.findViewById(R.id
                 .fragment_todo_list_rv_list);
@@ -76,6 +72,8 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
         recyclerView.addItemDecoration(new SpacesItemDecoration((int) Utility.dpToPx(5,
                 getContext())));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(null);
+
         view.findViewById(R.id.fragment_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
