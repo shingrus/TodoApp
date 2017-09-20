@@ -81,17 +81,4 @@ public class TodoItemsActivity extends AppCompatActivity implements TodoListFrag
         getSupportFragmentManager().popBackStack();
         setActionBarTitle(R.string.todo_list);
     }
-
-//    @Override
-//    public void onDateSet(DatePicker view, int year, int month, int day)
-//    {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(year, month, day);
-//        TodoDetailsFragment fragment = (TodoDetailsFragment) getSupportFragmentManager()
-//                .findFragmentByTag(TAG_FRAGMENT_DETAILS);
-//        if (fragment != null)
-//        {
-//            fragment.setDate(Utility.getDate(calendar));
-//        }
-//    }
 }

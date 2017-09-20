@@ -155,10 +155,9 @@ public class TodoDetailsFragment extends Fragment implements View.OnClickListene
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         // check if no view has focus:
         View v = ((Activity) getContext()).getCurrentFocus();
-        if (v == null)
-            return;
+        if (v != null)
+            inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-        inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     @Override

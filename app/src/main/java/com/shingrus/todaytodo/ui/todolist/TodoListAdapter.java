@@ -43,7 +43,6 @@ class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemViewHold
         void onCheckedChanged(int rowId, boolean checked);
     }
 
-
     TodoListAdapter(Context context, Cursor cursor, OnRowClickListener clickListener) {
         super(cursor);
         Resources resources = context.getResources();
@@ -52,7 +51,6 @@ class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemViewHold
         timeLeftFormat = context.getString(R.string.time_left_format);
 
     }
-
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, final Cursor cursor) {
@@ -75,19 +73,17 @@ class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemViewHold
         holder.cbx.setChecked(isCompleted);
 
 
-        if(longerThanTimeout) {
+        if (longerThanTimeout) {
             holder.cbx.setVisibility(View.GONE);
             holder.date.setText(TodoContract.getInsertedDate(date));
-        }
-        else {
+        } else {
 
             holder.cbx.setVisibility(View.VISIBLE);
             holder.date.setText(String.format(timeLeftFormat, hoursLeft));
         }
-
-        if ( isCompleted || longerThanTimeout) {
-            holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        if (isCompleted || longerThanTimeout) {
             holder.itemView.setAlpha(0.4f);
+            holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
 
             holder.itemView.setAlpha(1f);
@@ -133,12 +129,12 @@ class TodoListAdapter extends CursorRecyclerAdapter<TodoListAdapter.ItemViewHold
                     int columnIdIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns._ID);
                     int columnDataIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns.TITLE);
                     int columnInsertedIndex = mCursor.getColumnIndex(TodoContract.Todo.Columns.INSERTED);
-                    long date = mCursor.getInt(columnInsertedIndex) *1000L;
+                    long date = mCursor.getInt(columnInsertedIndex) * 1000L;
                     long currentTime = System.currentTimeMillis();
                     Uri uri = TodoContract.Todo.buildRowUri(mCursor.getInt(columnIdIndex));
                     mClickListener.onRowClick(uri, mCursor.getString(columnDataIndex),
                             mCursor.getInt(columnIdIndex),
-                            isOutdated(date,currentTime));
+                            isOutdated(date, currentTime));
                 }
             }
         }
